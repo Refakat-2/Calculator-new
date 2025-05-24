@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Calculator</title>
+</head>
+<style>
+  body{
+    /* display: grid;
+    place-items: center;
+    height: 100vh; */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f2f2f2; 
+  }
+  .calculator{
+    border: 1px solid black;
+    width: 300px;
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid #00000027;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  .display{
+    width: 92.5%;
+    height: 50px;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: right;
+    border-radius: 8px;
+    background-color: yellow;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: 555;
+  }
+  .cal-btns{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 10px;
+  }
+  .calculator-btn{
+    padding: 20px;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    font-weight: 555;
+    font-size: 1.5rem;
+    transition: transform 0.2s, background-color 0.3s;
+  }
+  .calculator-btn:hover{
+    transform: scale(1.1);
+  }
+  .calculator-btn:active{
+    transform: scale(0.90);
+  }
+  .btn-del{
+    background-color: rgb(243, 66, 66);
+  }
+  .btn-del:hover{
+    background-color: rgb(242, 21, 21);
+  }
+  .btn-num{
+    background-color: rgb(33, 142, 252);
+  }
+  .btn-num:hover{
+    background-color: rgb(10, 129, 249);
+  }
+  .btn-op{
+    background-color: rgb(143, 253, 99);
+  }
+   .btn-op:hover{
+    background-color: rgb(92, 254, 28);
+  }
+  .btn-eqal{
+    background-color: rgb(255, 123, 0);
+  }
+  .btn-eqal:hover{
+    background-color: rgb(255, 94, 0);
+  }
+  /*body background-color: #f2f2f2;  
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+     */
+</style>
+<body>
+
+  <div class="calculator">
+    <input type="text" class="display" id="display" disabled>
+    <div class="cal-btns">
+    <button class="calculator-btn btn-del" onclick="clearDisplay()">D</button>
+    <button class="calculator-btn btn-op" onclick="appendOperation('/');">/</button>
+    <button class="calculator-btn btn-op" onclick="appendOperation('*');">*</button>
+    <button class="calculator-btn btn-op" onclick="appendOperation('-');">-</button>
+    <button class="calculator-btn btn-num" onclick="appendNumber('7');">7</button>
+    <button class="calculator-btn btn-num" onclick="appendNumber('8');">8</button>
+    <button class="calculator-btn btn-num" onclick="appendNumber('9');">9</button>
+    <button class="calculator-btn btn-op" onclick="appendOperation('+');">+</button>
+    <button class="calculator-btn btn-num" onclick="appendNumber('4')">4</button>
+    <button class="calculator-btn btn-num" onclick="appendNumber('5')">5</button>
+    <button class="calculator-btn btn-num" onclick="appendNumber('6')">6</button>
+    <button class="calculator-btn btn-eqal" onclick="calculate();">=</button>
+    <button class="calculator-btn btn-num" onclick="appendNumber('1');">1</button>
+    <button class="calculator-btn btn-num" onclick="appendNumber('2');">2</button>
+    <button class="calculator-btn btn-num" onclick="appendNumber('3');">3</button>
+    <button class="calculator-btn btn-num" onclick="appendNumber('0');">0</button>
+    </div>
+  </div>
+  
+  <script>
+    let currentInput = '';
+    let currentOperation = '';
+    let previousInput = '';
+
+    function appendNumber(number){
+      currentInput += number;
+      document.querySelector('.display').value = `${previousInput} ${currentOperation} ${currentInput}`;
+    }
+    function appendOperation(operation){
+      if (currentInput === '')return;
+      if (previousInput !== ''){
+        calculate();
+      }
+
+      currentOperation = operation;
+      previousInput = currentInput;
+      currentInput = '';
+      document.querySelector('.display').value = `${previousInput} ${currentOperation} `;
+    }
+    function calculate(){
+      if (previousInput === '' || currentInput === '') return;
+      let result;
+      let previous = parseFloat(previousInput);
+      let current = parseFloat(currentInput);
+      
+      switch (currentOperation){
+        case '+': 
+        result = previous + current;
+        break;
+        case '-': 
+        result = previous - current;
+        break;
+        case '*': 
+        result = previous * current;
+        break;
+        case '/':
+          if (current === 0){
+            alert('Can not be devided by 0')
+            return;
+          }
+        result = previous / current;
+          break;
+        default: 
+        return;
+      }
+
+      currentInput = result.toString();
+      currentOperation = '';
+      previousInput = '';
+      document.querySelector('.display').value = currentInput;
+    }
+    
+        function clearDisplay() {
+            currentInput = '';
+            previousInput = '';
+            currentOperation = '';
+            document.querySelector('.display').value = '';
+        }
+  </script>
+</body>
+</html>
